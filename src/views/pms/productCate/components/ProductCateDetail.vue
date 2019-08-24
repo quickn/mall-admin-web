@@ -4,17 +4,17 @@
              :rules="rules"
              ref="productCateFrom"
              label-width="150px">
-      <el-form-item label="分类名称：" prop="name">
-        <el-input v-model="productCate.name"></el-input>
+      <el-form-item label="分类名称：" prop="productCategoryName">
+        <el-input v-model="productCate.productCategoryName"></el-input>
       </el-form-item>
       <el-form-item label="上级分类：">
         <el-select v-model="productCate.parentId"
                    placeholder="请选择分类">
           <el-option
             v-for="item in selectProductCateList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
+            :key="item.productCategoryId"
+            :label="item.productCategoryName"
+            :value="item.productCategoryId">
           </el-option>
         </el-select>
       </el-form-item>
@@ -77,7 +77,7 @@
     description: '',
     icon: '',
     keywords: '',
-    name: '',
+    productCategoryName: '',
     navStatus: 0,
     parentId: 0,
     productUnit: '',
@@ -136,7 +136,7 @@
       getSelectProductCateList() {
         fetchList(0, {pageSize: 100, pageNum: 1}).then(response => {
           this.selectProductCateList = response.data.list;
-          this.selectProductCateList.unshift({id: 0, name: '无上级分类'});
+          this.selectProductCateList.unshift({productCategoryId: 0, productCategoryName: '无上级分类'});
         });
       },
       getProductAttrCateList() {
@@ -148,12 +148,12 @@
             if (productAttrCate.productAttributeList != null && productAttrCate.productAttributeList.length > 0) {
               for (let j = 0; j < productAttrCate.productAttributeList.length; j++) {
                 children.push({
-                  label: productAttrCate.productAttributeList[j].name,
-                  value: productAttrCate.productAttributeList[j].id
+                  label: productAttrCate.productAttributeList[j].productAttributeName,
+                  value: productAttrCate.productAttributeList[j].productAttributeId
                 })
               }
             }
-            this.filterAttrs.push({label: productAttrCate.name, value: productAttrCate.id, children: children});
+            this.filterAttrs.push({label: productAttrCate.attributeCategoryName, value: productAttrCate.productAttributeCategoryId, children: children});
           }
         });
       },

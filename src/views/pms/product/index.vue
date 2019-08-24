@@ -85,7 +85,7 @@
                 border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.id}}</template>
+          <template slot-scope="scope">{{scope.row.productId}}</template>
         </el-table-column>
         <el-table-column label="商品图片" width="120" align="center">
           <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
@@ -214,7 +214,7 @@
     <el-dialog
       title="编辑货品信息"
       :visible.sync="editSkuInfo.dialogVisible"
-      width="40%">
+      width="50%">
       <span>商品货号：</span>
       <span>{{editSkuInfo.productSn}}</span>
       <el-input placeholder="按sku编号搜索" v-model="editSkuInfo.keyword" size="small" style="width: 50%;margin-left: 20px">
@@ -225,6 +225,7 @@
                 border>
         <el-table-column
           label="SKU编号"
+          width="200"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.skuCode"></el-input>
@@ -233,7 +234,7 @@
         <el-table-column
           v-for="(item,index) in editSkuInfo.productAttr"
           :label="item.name"
-          :key="item.id"
+          :key="item.productId"
           align="center">
           <template slot-scope="scope">
             {{getProductSkuSp(scope.row,index)}}
@@ -241,7 +242,7 @@
         </el-table-column>
         <el-table-column
           label="销售价格"
-          width="80"
+          width="120"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.price"></el-input>
@@ -249,7 +250,7 @@
         </el-table-column>
         <el-table-column
           label="商品库存"
-          width="80"
+          width="120"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.stock"></el-input>
@@ -413,7 +414,7 @@
           this.brandOptions = [];
           let brandList = response.data.list;
           for (let i = 0; i < brandList.length; i++) {
-            this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
+            this.brandOptions.push({label: brandList[i].name, value: brandList[i].productId});
           }
         });
       },
@@ -425,20 +426,20 @@
             let children = [];
             if (list[i].children != null && list[i].children.length > 0) {
               for (let j = 0; j < list[i].children.length; j++) {
-                children.push({label: list[i].children[j].name, value: list[i].children[j].id});
+                children.push({label: list[i].children[j].name, value: list[i].children[j].productId});
               }
             }
-            this.productCateOptions.push({label: list[i].name, value: list[i].id, children: children});
+            this.productCateOptions.push({label: list[i].name, value: list[i].productId, children: children});
           }
         });
       },
       handleShowSkuEditDialog(index,row){
         this.editSkuInfo.dialogVisible=true;
-        this.editSkuInfo.productId=row.id;
+        this.editSkuInfo.productId=row.productId;
         this.editSkuInfo.productSn=row.productSn;
         this.editSkuInfo.productAttributeCategoryId = row.productAttributeCategoryId;
         this.editSkuInfo.keyword=null;
-        fetchSkuStockList(row.id,{keyword:this.editSkuInfo.keyword}).then(response=>{
+        fetchSkuStockList(row.productId,{keyword:this.editSkuInfo.keyword}).then(response=>{
           this.editSkuInfo.stockList=response.data;
         });
         fetchProductAttrList(row.productAttributeCategoryId,{type:0}).then(response=>{
@@ -505,7 +506,7 @@
         }).then(() => {
           let ids=[];
           for(let i=0;i<this.multipleSelection.length;i++){
-            ids.push(this.multipleSelection[i].id);
+            ids.push(this.multipleSelection[i].productId);
           }
           switch (this.operateType) {
             case this.operates[0].value:
@@ -551,17 +552,17 @@
       },
       handlePublishStatusChange(index, row) {
         let ids = [];
-        ids.push(row.id);
+        ids.push(row.productId);
         this.updatePublishStatus(row.publishStatus, ids);
       },
       handleNewStatusChange(index, row) {
         let ids = [];
-        ids.push(row.id);
+        ids.push(row.productId);
         this.updateNewStatus(row.newStatus, ids);
       },
       handleRecommendStatusChange(index, row) {
         let ids = [];
-        ids.push(row.id);
+        ids.push(row.productId);
         this.updateRecommendStatus(row.recommandStatus, ids);
       },
       handleResetSearch() {
@@ -575,12 +576,12 @@
           type: 'warning'
         }).then(() => {
           let ids = [];
-          ids.push(row.id);
+          ids.push(row.productId);
           this.updateDeleteStatus(1,ids);
         });
       },
       handleUpdateProduct(index,row){
-        this.$router.push({path:'/pms/updateProduct',query:{id:row.id}});
+        this.$router.push({path:'/pms/updateProduct',query:{id:row.productId}});
       },
       handleShowProduct(index,row){
         console.log("handleShowProduct",row);

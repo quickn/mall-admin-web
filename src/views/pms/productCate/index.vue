@@ -16,10 +16,10 @@
                 :data="list"
                 v-loading="listLoading" border>
         <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.id}}</template>
+          <template slot-scope="scope">{{scope.row.productCategoryId}}</template>
         </el-table-column>
         <el-table-column label="分类名称" align="center">
-          <template slot-scope="scope">{{scope.row.name}}</template>
+          <template slot-scope="scope">{{scope.row.productCategoryName}}</template>
         </el-table-column>
         <el-table-column label="级别" width="100" align="center">
           <template slot-scope="scope">{{scope.row.level | levelFilter}}</template>
@@ -154,7 +154,7 @@
       handleNavStatusChange(index, row) {
         let data = new URLSearchParams();
         let ids=[];
-        ids.push(row.id)
+        ids.push(row.productCategoryId)
         data.append('ids',ids);
         data.append('navStatus',row.navStatus);
         updateNavStatus(data).then(response=>{
@@ -168,7 +168,7 @@
       handleShowStatusChange(index, row) {
         let data = new URLSearchParams();
         let ids=[];
-        ids.push(row.id)
+        ids.push(row.productCategoryId)
         data.append('ids',ids);
         data.append('showStatus',row.showStatus);
         updateShowStatus(data).then(response=>{
@@ -180,13 +180,13 @@
         });
       },
       handleShowNextLevel(index, row) {
-        this.$router.push({path: '/pms/productCate', query: {parentId: row.id}})
+        this.$router.push({path: '/pms/productCate', query: {parentId: row.productCategoryId}})
       },
       handleTransferProduct(index, row) {
         console.log('handleAddProductCate');
       },
       handleUpdate(index, row) {
-        this.$router.push({path:'/pms/updateProductCate',query:{id:row.id}});
+        this.$router.push({path:'/pms/updateProductCate',query:{id:row.productCategoryId}});
       },
       handleDelete(index, row) {
         this.$confirm('是否要删除该品牌', '提示', {
@@ -194,7 +194,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteProductCate(row.id).then(response => {
+          deleteProductCate(row.productCategoryId).then(response => {
             this.$message({
               message: '删除成功',
               type: 'success',
